@@ -1,0 +1,11 @@
+services:
+  ghbot:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      BACKUP_PATH: /data/backups
+      DATABASE_PATH: /data/bot.db
+      WORK_PATH: /data/work
+    volumes:
+      - ./data:/data

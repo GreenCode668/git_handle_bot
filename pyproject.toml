@@ -1,0 +1,13 @@
+[project]
+name = "ghbot"
+version = "1.0.0"
+description = "Private Telegram bot for safely managing a GitHub account"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 130
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["F", "E9", "B"]
+ignore = ["B008"]
