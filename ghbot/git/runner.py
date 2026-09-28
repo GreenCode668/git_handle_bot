@@ -21,6 +21,17 @@ from ghbot.logging_setup import Redactor, get_redactor
 
 log = logging.getLogger(__name__)
 
+# Windows processes need these to work at all: without SYSTEMROOT, Winsock cannot
+# resolve hostnames ("Could not resolve host"), and TEMP/TMP are used for scratch files.
+_WINDOWS_PASSTHROUGH = ("SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "TEMP", "TMP", "PATHEXT", "COMSPEC")
+
+
+def platform_env() -> dict[str, str]:
+    """OS variables a minimal subprocess environment must keep (empty outside Windows)."""
+    if os.name != "nt":
+        return {}
+    return {key: os.environ[key] for key in _WINDOWS_PASSTHROUGH if key in os.environ}
+
 
 class GitError(Exception):
     def __init__(self, message: str, returncode: int | None = None) -> None:
@@ -66,6 +77,7 @@ class GitRunner:
         if auth and self._token:
             config[f"http.{self._auth_host}.extraheader"] = f"AUTHORIZATION: basic {self._basic(self._token)}"
         env = {
+            **platform_env(),
             "PATH": os.environ.get("PATH", "/usr/local/bin:/usr/bin:/bin"),
             "HOME": str(self._home),
             "LANG": "C.UTF-8",

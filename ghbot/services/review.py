@@ -21,6 +21,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from ghbot.git.runner import platform_env
 from ghbot.logging_setup import get_redactor
 from ghbot.validators import RepoRef, ValidationError
 
@@ -131,6 +132,7 @@ async def run_command(args: list[str], cwd: Path, timeout: int, env_extra: dict[
                       ) -> tuple[int, str]:
     """Run one command without a shell, capped by a timeout, output redacted."""
     env = {
+        **platform_env(),
         "PATH": os.environ.get("PATH", "/usr/local/bin:/usr/bin:/bin"),
         "HOME": os.environ.get("HOME", str(cwd)),
         "LANG": "C.UTF-8",
