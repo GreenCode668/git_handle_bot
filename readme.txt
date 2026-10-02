@@ -25,4 +25,3 @@ Settings per account (/pr-settings): auto merge (default OFF), merge method (squ
 
 Never: bypass branch protection, bypass or fake reviews, force-push a protected branch, or touch a private repository. Merges go through GitHub's merge API, so GitHub enforces its own rules; the bot additionally refuses to merge while a required check is failing, pending or has not reported yet.
 
-/achievements shows real counts only (pull requests opened, merged and reviewed, commits, issues). GitHub has no API for achievement progress, so nothing there is predicted or promised.
