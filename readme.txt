@@ -19,9 +19,5 @@ Requires the Claude Code CLI on the server: curl -fsSL https://claude.ai/install
 Pull request automation
 /pr opens the menu; /pr-create walks through repository → change type → change → commit message → diff and impact → confirmation. The bot then creates a branch, commits, opens the pull request and records it in the operation history. /pr-status shows check runs, commit statuses and reviews; merging needs the typed phrase MERGE owner/repo, or happens by itself when auto-merge is on.
 
-Change types: documentation/README text, an exact text replacement (version bumps), whitespace cleanup, and full file content you provide. A change that would not alter the file is refused, so no empty commits.
 
-Settings per account (/pr-settings): auto merge (default OFF), merge method (squash/merge/rebase), delete branch after merge, require successful checks, allowed repositories, maximum concurrent PR operations.
-
-Never: bypass branch protection, bypass or fake reviews, force-push a protected branch, or touch a private repository. Merges go through GitHub's merge API, so GitHub enforces its own rules; the bot additionally refuses to merge while a required check is failing, pending or has not reported yet.
 
