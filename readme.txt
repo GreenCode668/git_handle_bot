@@ -16,8 +16,19 @@ The default branch is never committed to, nothing is force-pushed, and these pul
 
 Requires the Claude Code CLI on the server: curl -fsSL https://claude.ai/install.sh | bash, plus credentials (ANTHROPIC_API_KEY or claude setup-token) in the bot's environment. /review-status shows whether it is found.
 
-Pull request automation
-/pr opens the menu; /pr-create walks through repository → change type → change → commit message → diff and impact → confirmation. The bot then creates a branch, commits, opens the pull request and records it in the operation history. /pr-status shows check runs, commit statuses and reviews; merging needs the typed phrase MERGE owner/repo, or happens by itself when auto-merge is on.
+Backups (BK-YYYYMMDD-NNN)
+Each backup directory under BACKUP_PATH contains:
+
+repo.git: a git clone --mirror with every ref (branches, tags, refs/pull/*, notes) and all history
+repo.bundle: a portable bundle of all branches and tags
+manifest.json: every ref and SHA, commit count, bundle SHA-256, HEAD, warnings
+metadata.json: visibility, description, topics, default branch and similar (used to recreate a deleted repo)
+wiki.git: the wiki, if it exists and wiki backups are enabled
+Verification runs git fsck --full, compares refs with the manifest, checks the commit count and bundle checksum, then restores the bundle into a scratch repository and compares every branch and tag.
+
+Bulk and automatic backups: /backup-all asks first, then backs up every managed public repository (optionally only changed ones). /autobackup configures interval, scope (all or favorites), skip-unchanged and retention. Retention only prunes automatic backups. It never removes the newest verified backup of a repository, manual or pre-operation backups, or a backup used by a pending operation. /verify-all reports damaged and missing backups. /backup-diff compares a backup with GitHub.
+
+Not included (GitHub does not store these in git): issues, PR discussions, release assets, Actions secrets and logs, stars, LFS objects. The bot says so before deleting anything.
 
 
 
